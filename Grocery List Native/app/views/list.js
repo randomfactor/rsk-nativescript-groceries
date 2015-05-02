@@ -24,15 +24,20 @@ exports.load = function(args) {
 };
 
 function loadGroceries() {
-  httpModule.getJSON({
-      url: "http://api.everlive.com/v1/" + config.apiKey + "/Groceries",
-      method: "GET"
-  }).then(function(result) {
-      result.Result.forEach(function(grocery) {
-          groceries.push({ name: grocery.Name });
-      });
+//  httpModule.getJSON({
+//      url: "http://api.everlive.com/v1/" + config.apiKey + "/Groceries",
+//      method: "GET"
+//  }).then(function(result) {
+//      result.Result.forEach(function(grocery) {
+//          groceries.push({ name: grocery.Name });
+//      });
+//  });
+  el.data("Groceries").get().then(function(data) {
+    data.result.forEach(function(grocery) {
+      groceries.push({ name: grocery.Name });
+    });
   });
-};
+}
 
 exports.add = function() {
   // Dismiss the keyboard before adding to the list
@@ -45,14 +50,20 @@ exports.add = function() {
 };
 
 function addGrocery( grocery ) {
-  httpModule.request({
-      url: "http://api.everlive.com/v1/" + config.apiKey + "/Groceries",
-      method: "POST",
-      content: JSON.stringify({ Name: grocery }),
-      headers: {
-          "Content-Type": "application/json"
-      }
-  }).then( function( result ) {
-      groceries.push({ name: grocery });
-  });
-};
+//  httpModule.request({
+//      url: "http://api.everlive.com/v1/" + config.apiKey + "/Groceries",
+//      method: "POST",
+//      content: JSON.stringify({ Name: grocery }),
+//      headers: {
+//          "Content-Type": "application/json"
+//      }
+//  }).then( function( result ) {
+//      groceries.push({ name: grocery });
+//  });
+  el.data("Groceries").create({ Name: grocery})
+  .then(
+    function(result) {
+      groceries.push({ name: grocery});
+    }
+  );
+}
