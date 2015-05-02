@@ -19,4 +19,17 @@ exports.load = function(args) {
 	while (groceries.length) {
 		groceries.pop();
 	}
+  
+  loadGroceries();
+};
+
+function loadGroceries() {
+  httpModule.getJSON({
+      url: "http://api.everlive.com/v1/" + config.apiKey + "/Groceries",
+      method: "GET"
+  }).then(function(result) {
+      result.Result.forEach(function(grocery) {
+          groceries.push({ name: grocery.Name });
+      });
+  });
 };
