@@ -33,3 +33,26 @@ function loadGroceries() {
       });
   });
 };
+
+exports.add = function() {
+  // Dismiss the keyboard before adding to the list
+  viewModule.getViewById(page, "grocery").dismissSoftInput();
+  
+  addGrocery(pageData.get("grocery"));
+  
+  // Clear the text field
+  pageData.set("grocery", "");
+};
+
+function addGrocery( grocery ) {
+  httpModule.request({
+      url: "http://api.everlive.com/v1/" + config.apiKey + "/Groceries",
+      method: "POST",
+      content: JSON.stringify({ Name: grocery }),
+      headers: {
+          "Content-Type": "application/json"
+      }
+  }).then( function( result ) {
+      groceries.push({ name: grocery });
+  });
+};
